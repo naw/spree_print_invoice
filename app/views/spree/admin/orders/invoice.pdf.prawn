@@ -42,13 +42,17 @@ grid([1,0], [6,4]).bounding_box do
     billing << "\n#{bill_address.country.name}"
     billing << "\n#{bill_address.phone}"
 
-    shipping =  "#{ship_address.firstname} #{ship_address.lastname}"
-    shipping << "\n#{ship_address.address1}"
-    shipping << "\n#{ship_address.address2}" unless ship_address.address2.blank?
-    shipping << "\n#{ship_address.city}, #{ship_address.state_text} #{ship_address.zipcode}"
-    shipping << "\n#{ship_address.country.name}"
-    shipping << "\n#{ship_address.phone}"
-    shipping << "\n\n#{Spree.t(:via, scope: :print_invoice)} #{@order.shipments.first.shipping_method.name}"
+    if ship_address
+      shipping =  "#{ship_address.firstname} #{ship_address.lastname}"
+      shipping << "\n#{ship_address.address1}"
+      shipping << "\n#{ship_address.address2}" unless ship_address.address2.blank?
+      shipping << "\n#{ship_address.city}, #{ship_address.state_text} #{ship_address.zipcode}"
+      shipping << "\n#{ship_address.country.name}"
+      shipping << "\n#{ship_address.phone}"
+      shipping << "\n\n#{Spree.t(:via, scope: :print_invoice)} #{@order.shipments.first.shipping_method.name}"
+    else
+      shipping = "No shipping"
+    end
 
     data = [[address_cell_billing, address_cell_shipping], [billing, shipping]]
     table(data, position: :center, column_widths: [270, 270])
