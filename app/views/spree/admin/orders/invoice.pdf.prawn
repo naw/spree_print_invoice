@@ -106,7 +106,7 @@ grid([1,0], [6,4]).bounding_box do
 
   # Payments
   total_payments = 0.0
-  @order.payments.each do |payment|
+  @order.payments.where(state: 'completed').each do |payment|
     totals << [
       make_cell(
         content: Spree.t(:payment_via,
